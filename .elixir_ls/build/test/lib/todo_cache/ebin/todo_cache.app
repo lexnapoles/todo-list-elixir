@@ -1,0 +1,12 @@
+{application,todo_cache,
+             [{applications,[kernel,stdlib,elixir,logger]},
+              {description,"todo_cache"},
+              {modules,['Elixir.Collectable.Todo.List',
+                        'Elixir.String.Chars.Todo.List','Elixir.Todo.Cache',
+                        'Elixir.Todo.Client','Elixir.Todo.Database',
+                        'Elixir.Todo.Database.Client',
+                        'Elixir.Todo.Database.Server',
+                        'Elixir.Todo.Database.Worker','Elixir.Todo.List',
+                        'Elixir.Todo.Server']},
+              {registered,[]},
+              {vsn,"0.1.0"}]}.
