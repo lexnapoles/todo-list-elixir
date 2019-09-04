@@ -3,8 +3,9 @@ defmodule Todo.Database.Server do
   @db_folder "./persist"
   @workers 3
 
-  def start do
-    GenServer.start(__MODULE__, nil, name: __MODULE__)
+  def start_link do
+    IO.puts("Starting database")
+    GenServer.start_link(__MODULE__, nil, name: __MODULE__)
   end
 
   @impl GenServer
@@ -12,7 +13,7 @@ defmodule Todo.Database.Server do
     workers =
       1..@workers
       |> Stream.map(fn _ ->
-        {:ok, pid} = Todo.Database.Worker.start(@db_folder)
+        {:ok, pid} = Todo.Database.Worker.start_link(@db_folder)
         pid
       end)
       |> Stream.with_index()

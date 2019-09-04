@@ -1,6 +1,6 @@
 defmodule Todo.Client do
-  def start(name) do
-    Todo.Server.start(name)
+  def start_link(name) do
+    Todo.Server.start_link(name)
   end
 
   def add_entry(pid, new_entry) do

@@ -1,6 +1,6 @@
 defmodule Todo.Database.Client do
-  def start do
-    Todo.Database.Server.start()
+  def start_link do
+    Todo.Database.Server.start_link()
   end
 
   def store(key, data) do
