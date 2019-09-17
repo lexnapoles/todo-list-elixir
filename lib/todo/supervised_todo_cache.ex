@@ -11,8 +11,6 @@ defmodule Todo.Cache do
   end
 
   def init(_) do
-    Todo.Database.Client.start_link()
-
     {:ok, %{}}
   end
 
@@ -22,7 +20,7 @@ defmodule Todo.Cache do
         {:reply, todo_server, todo_servers}
 
       :error ->
-        {:ok, new_server} = Todo.Client.start_link(todo_list_name)
+        {:ok, new_server} = Todo.Server.start_link(todo_list_name)
 
         {:reply, new_server, Map.put(todo_servers, todo_list_name, new_server)}
     end

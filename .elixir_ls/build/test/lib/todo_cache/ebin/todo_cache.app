@@ -7,6 +7,7 @@
                         'Elixir.Todo.Database.Client',
                         'Elixir.Todo.Database.Server',
                         'Elixir.Todo.Database.Worker','Elixir.Todo.List',
-                        'Elixir.Todo.Server','Elixir.Todo.System']},
+                        'Elixir.Todo.ProcessRegistry','Elixir.Todo.Server',
+                        'Elixir.Todo.System']},
               {registered,[]},
               {vsn,"0.1.0"}]}.
