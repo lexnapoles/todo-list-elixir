@@ -1,8 +1,8 @@
 defmodule Todo.Server do
-  use GenServer
+  use GenServer, restart: :temporary
 
   def start_link(name) do
-    GenServer.start_link(__MODULE__, name)
+    GenServer.start_link(__MODULE__, name, name: via_tuple(name))
   end
 
   @impl GenServer
@@ -58,5 +58,9 @@ defmodule Todo.Server do
   @impl GenServer
   def handle_info({:real_init, name}, _state) do
     {:noreply, {name, Todo.Database.Client.get(name) || Todo.List.new()}}
+  end
+
+  defp via_tuple(name) do
+    Todo.ProcessRegistry.via_tuple({__MODULE__, name})
   end
 end
