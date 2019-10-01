@@ -1,49 +1,70 @@
 defmodule Todo.Server do
-  use Agent, restart: :temporary
+  use GenServer, restart: :temporary
+
+  @expiry_idle_timeout :timer.seconds(10)
 
   def start_link(name) do
-    Agent.start_link(
-      fn ->
-        IO.puts("Starting to-do server for #{name}")
-        {name, Todo.Database.Client.get(name) || Todo.List.new()}
-      end,
-      name: via_tuple(name)
-    )
+    GenServer.start_link(__MODULE__, name, name: via_tuple(name))
   end
 
-  def entries(todo_server, date) do
-    Agent.get(
-      todo_server,
-      fn {_name, todo_list} -> Todo.List.entries(todo_list, date) end
-    )
+  @impl GenServer
+  def init(name) do
+    IO.puts("Starting to-do server for #{name}")
+    send(self(), {:real_init, name})
+    {:ok, nil}
   end
 
-  def add_entry(todo_server, new_entry) do
-    Agent.cast(todo_server, fn {name, todo_list} ->
-      new_list = Todo.List.add_entry(todo_list, new_entry)
-      Todo.Database.Client.store(name, new_list)
-      {name, new_list}
-    end)
+  @impl GenServer
+  def handle_call({:entries, date}, _, {_name, todo_list} = state) do
+    entries = Todo.List.entries(todo_list, date)
+
+    {:reply, entries, state, @expiry_idle_timeout}
   end
 
-  def update_entries(todo_server, new_entry) do
-    Agent.cast(todo_server, fn {name, todo_list} ->
-      new_list = Todo.List.update_entry(todo_list, new_entry)
+  @impl GenServer
+  def handle_cast({:add_entry, new_entry}, {name, todo_list}) do
+    new_list = Todo.List.add_entry(todo_list, new_entry)
 
-      Todo.Database.Client.store(name, new_list)
+    Todo.Database.Client.store(name, new_list)
 
-      {name, new_list}
-    end)
+    {:noreply, {name, new_list}, @expiry_idle_timeout}
   end
 
-  def delete_entry(todo_server, entry_id) do
-    Agent.cast(todo_server, fn {name, todo_list} ->
-      new_list = Todo.List.delete_entry(todo_list, entry_id)
+  @impl GenServer
+  def handle_cast({:update_entries, new_entry}, {name, todo_list}) do
+    new_list = Todo.List.update_entry(todo_list, new_entry)
 
-      Todo.Database.Client.store(name, new_list)
+    Todo.Database.Client.store(name, new_list)
 
-      {name, new_list}
-    end)
+    {:noreply, {name, new_list}}
+  end
+
+  @impl GenServer
+  def handle_cast({:update_entries, entry_id, updater_fun}, {name, todo_list}) do
+    new_list = Todo.List.update_entry(todo_list, entry_id, updater_fun)
+
+    Todo.Database.Client.store(name, new_list)
+
+    {:noreply, {name, new_list}}
+  end
+
+  @impl GenServer
+  def handle_cast({:delete_entry, entry_id}, {name, todo_list}) do
+    new_list = Todo.List.delete_entry(todo_list, entry_id)
+
+    Todo.Database.Client.store(name, new_list)
+
+    {:noreply, {name, new_list}}
+  end
+
+  @impl GenServer
+  def handle_info({:real_init, name}, _state) do
+    {:noreply, {name, Todo.Database.Client.get(name) || Todo.List.new()}, @expiry_idle_timeout}
+  end
+
+  def handle_info(:timeout, {name, todo_list}) do
+    IO.puts("Stopping to-do server for #{name}")
+    {:stop, :normal, {name, todo_list}}
   end
 
   defp via_tuple(name) do

@@ -3,10 +3,9 @@ defmodule TodoCacheTest do
   doctest Todo.Cache
 
   test "server_process" do
-    {:ok, cache} = Todo.Cache.start()
-    bob_pid = Todo.Cache.server_process(cache, "bob")
+    bob_pid = Todo.Cache.server_process("bob")
 
-    assert bob_pid != Todo.Cache.server_process(cache, "alice")
-    assert bob_pid == Todo.Cache.server_process(cache, "bob")
+    assert bob_pid != Todo.Cache.server_process("alice")
+    assert bob_pid == Todo.Cache.server_process("bob")
   end
 end

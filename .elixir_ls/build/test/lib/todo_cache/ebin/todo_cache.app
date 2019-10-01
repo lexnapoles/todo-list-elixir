@@ -2,11 +2,14 @@
              [{applications,[kernel,stdlib,elixir,logger]},
               {description,"todo_cache"},
               {modules,['Elixir.Collectable.Todo.List',
-                        'Elixir.String.Chars.Todo.List','Elixir.Todo.Cache',
-                        'Elixir.Todo.Database','Elixir.Todo.Database.Client',
+                        'Elixir.String.Chars.Todo.List',
+                        'Elixir.Todo.Application','Elixir.Todo.Cache',
+                        'Elixir.Todo.Client','Elixir.Todo.Database',
+                        'Elixir.Todo.Database.Client',
                         'Elixir.Todo.Database.Server',
                         'Elixir.Todo.Database.Worker','Elixir.Todo.List',
                         'Elixir.Todo.Metrics','Elixir.Todo.ProcessRegistry',
                         'Elixir.Todo.Server','Elixir.Todo.System']},
               {registered,[]},
-              {vsn,"0.1.0"}]}.
+              {vsn,"0.1.0"},
+              {mod,{'Elixir.Todo.Application',[]}}]}.
