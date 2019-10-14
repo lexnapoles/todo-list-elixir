@@ -1,5 +1,6 @@
 {application,todo_cache,
-             [{applications,[kernel,stdlib,elixir,logger]},
+             [{applications,[kernel,stdlib,elixir,logger,poolboy,cowboy,plug,
+                             plug_cowboy]},
               {description,"todo_cache"},
               {modules,['Elixir.Collectable.Todo.List',
                         'Elixir.String.Chars.Todo.List',
@@ -9,7 +10,8 @@
                         'Elixir.Todo.Database.Server',
                         'Elixir.Todo.Database.Worker','Elixir.Todo.List',
                         'Elixir.Todo.Metrics','Elixir.Todo.ProcessRegistry',
-                        'Elixir.Todo.Server','Elixir.Todo.System']},
+                        'Elixir.Todo.Server','Elixir.Todo.System',
+                        'Elixir.Todo.Web']},
               {registered,[]},
               {vsn,"0.1.0"},
               {mod,{'Elixir.Todo.Application',[]}}]}.

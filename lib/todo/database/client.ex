@@ -1,13 +1,13 @@
 defmodule Todo.Database.Client do
   def store(key, data) do
-    key
-    |> Todo.Database.Server.choose_worker()
-    |> GenServer.cast({:store, key, data})
+    :poolboy.transaction(Todo.Database.Server, fn worker_pid ->
+      GenServer.cast(worker_pid, {:store, key, data})
+    end)
   end
 
   def get(key) do
-    key
-    |> Todo.Database.Server.choose_worker()
-    |> GenServer.call({:get, key})
+    :poolboy.transaction(Todo.Database.Server, fn worker_pid ->
+      GenServer.call(worker_pid, {:get, key})
+    end)
   end
 end

@@ -4,9 +4,9 @@ defmodule Todo.Metrics do
   def start_link(_arg), do: Task.start_link(&loop/0)
 
   defp loop() do
-    Process.sleep(:timer.seconds(10))
-    IO.inspect(collect_metrics())
-    loop()
+    # Process.sleep(:timer.seconds(10))
+    # IO.inspect(collect_metrics())
+    # loop()
   end
 
   defp collect_metrics() do

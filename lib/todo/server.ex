@@ -9,6 +9,7 @@ defmodule Todo.Server do
 
   @impl GenServer
   def init(name) do
+    IO.inspect(name)
     IO.puts("Starting to-do server for #{name}")
     send(self(), {:real_init, name})
     {:ok, nil}
@@ -59,6 +60,8 @@ defmodule Todo.Server do
 
   @impl GenServer
   def handle_info({:real_init, name}, _state) do
+    IO.puts("Starting to-do server real init")
+
     {:noreply, {name, Todo.Database.Client.get(name) || Todo.List.new()}, @expiry_idle_timeout}
   end
 
