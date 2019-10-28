@@ -9,9 +9,8 @@
                         'Elixir.Todo.Database.Client',
                         'Elixir.Todo.Database.Server',
                         'Elixir.Todo.Database.Worker','Elixir.Todo.List',
-                        'Elixir.Todo.Metrics','Elixir.Todo.ProcessRegistry',
-                        'Elixir.Todo.Server','Elixir.Todo.System',
-                        'Elixir.Todo.Web']},
+                        'Elixir.Todo.Metrics','Elixir.Todo.Server',
+                        'Elixir.Todo.System','Elixir.Todo.Web']},
               {registered,[]},
               {vsn,"0.1.0"},
               {mod,{'Elixir.Todo.Application',[]}}]}.
