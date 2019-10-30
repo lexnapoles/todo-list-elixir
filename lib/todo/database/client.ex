@@ -1,7 +1,7 @@
 defmodule Todo.Database.Client do
   def store(key, data) do
     :poolboy.transaction(Todo.Database.Server, fn worker_pid ->
-      GenServer.cast(worker_pid, {:store, key, data})
+      GenServer.call(worker_pid, {:store, key, data})
     end)
   end
 

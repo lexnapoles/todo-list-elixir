@@ -1,10 +1,8 @@
 defmodule Todo.Database.Server do
-  @db_folder "./persist"
   @pool_size 3
+  @db_folder "./persist"
 
   def child_spec(_) do
-    Todo.Database.init(@db_folder)
-
     :poolboy.child_spec(
       __MODULE__,
       [

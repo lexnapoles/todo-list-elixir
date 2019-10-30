@@ -4,6 +4,8 @@ defmodule Todo.Database do
   end
 
   def store(db_folder, key, data) do
+    IO.puts("WORKING #{Node.self()}, #{db_folder}")
+
     db_folder
     |> file_name(key)
     |> File.write!(:erlang.term_to_binary(data))
